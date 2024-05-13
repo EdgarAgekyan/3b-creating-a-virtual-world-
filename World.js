@@ -57,27 +57,22 @@ let u_Sampler1;
 function setupWebGL() {
   // Retrieve <canvas> element
   canvas = document.getElementById('webgl');
-
   // Get the rendering context for WebGL
   gl = canvas.getContext("webgl", { preserveDrawingBuffer: true });
-
   if (!gl) {
     console.log('Failed to get the rendering context for WebGL');
     return;
   }
-
   gl.enable(gl.DEPTH_TEST);
-
 }
 
 function connectVariablesToGLSL() {
-  // Initialize shaders
+
   if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
     console.log('Failed to intialize shaders.');
     return;
   }
 
-  // Get the storage location of a_Position
   a_Position = gl.getAttribLocation(gl.program, 'a_Position');
   if (a_Position < 0) {
     console.log('Failed to get the storage location of a_Position');
@@ -90,12 +85,6 @@ function connectVariablesToGLSL() {
     return;
   }
 
-  // u_whichTexture = gl.getAttribLocation(gl.program, 'u_whichTexture');
-  // if (u_whichTexture < 0) {
-  //   console.log('Failed to get the storage location of u_whichTexture');
-  //   return;
-  // }
-  // Get the storage location of u_FragColor
   u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor');
   if (!u_FragColor) {
     console.log('Failed to get the storage location of u_FragColor');
@@ -114,7 +103,6 @@ function connectVariablesToGLSL() {
     return;
   }
 
-  
   u_ViewMatrix = gl.getUniformLocation(gl.program, 'u_ViewMatrix');
   if (!u_ViewMatrix) {
     console.log('Failed to get the storage location of u_ViewMatrix');
@@ -144,20 +132,6 @@ function connectVariablesToGLSL() {
     console.log('Failed to get the storage location of u_whichTexture');
     return;
   }
-
-
-  // u_Sampler0 = gl.getUniformLocation(gl.program, 'u_Sampler0');
-  // if (!u_Sampler0) {
-  //   console.log('Failed to create the u_Sampler0 object');
-  //   return false;
-  // }
-
-
-  // u_Sampler0 = gl.getUniformLocation(gl.program, 'u_Sampler0');
-  // if (!u_Sampler0) {
-  //   console.log('Failed to get the storage location of u_Sampler0');
-  //   return;
-  // }
 
   var identityM = new Matrix4();
   gl.uniformMatrix4fv(u_ModelMatrix, false, identityM.elements);
@@ -205,8 +179,6 @@ function addActionsForHtmlUI() {
 
   document.getElementById('animationYellowOnButton').onclick = function () { g_yellowAnimation = true; }
   document.getElementById('animationYellowOffButton').onclick = function () { g_yellowAnimation = false; }
-  // document.getElementById('yellowSlide').addEventListener('mousemove', function () { g_yellowAngle = this.value; renderAllShapes(); });
-  // document.getElementById('magentaSlide').addEventListener('mousemove', function () { g_magentaAngle = this.value; renderAllShapes(); });
 
   document.getElementById('clear').onclick = function () {
     g_globalAngle = 0,
@@ -217,17 +189,17 @@ function addActionsForHtmlUI() {
     y = 0;
     x_rot = 0;
     y_rot = 0,
-    g_leftArm = 0,
-    g_leftHand = 0,
-    g_rightArm = 0,
-    g_rightHand = 0;
+      g_leftArm = 0,
+      g_leftHand = 0,
+      g_rightArm = 0,
+      g_rightHand = 0;
     g_leftLeg = 0,
-    g_leftFoot = 0,
-    g_rightLeg = 0,
-    g_rightFoot = 0;
+      g_leftFoot = 0,
+      g_rightLeg = 0,
+      g_rightFoot = 0;
     g_shiftClick = 0;
     g_shiftAnimation = 0,
-    g_yellowAngle = 0;
+      g_yellowAngle = 0;
   }
 
   document.getElementById('angleSlide1').addEventListener('mousemove', function () { g_globalAngle = this.value; renderAllShapes(); });
@@ -254,36 +226,26 @@ function addActionsForHtmlUI() {
 
 }
 
-
-
 function initTextures() {
 
+  // Sky
   var image = new Image();
   if (!image) {
     console.log('Failed to create the image object');
     return false;
   }
-
-  // image.onload = function() {loadTexture(gl, n, texture, u_Sampler0, image);}
-
-  image.onload = function() {sendImageToTEXTURE0(image);}
-
+  image.onload = function () { sendImageToTEXTURE0(image); }
   image.src = './resources/images/sky.jpg';
 
+  // Ground
   var image2 = new Image();
   if (!image2) {
     console.log('Failed to create the image object');
     return false;
   }
-  image2.onload = function() {sendImageToTEXTURE1(image2);}
-
+  image2.onload = function () { sendImageToTEXTURE1(image2); }
   image2.src = './resources/images/ground.jpg';
-
-
-  
-
   return true;
-
 }
 
 function sendImageToTEXTURE0(image) {
@@ -322,29 +284,19 @@ function sendImageToTEXTURE1(image) {
 
 
 function main() {
-
-  // Set up canvas and gl variables
   setupWebGL();
-  // Set up the GLSL shader programs and connect GLSL variables
   connectVariablesToGLSL();
-
-  // Set up actions for the HTML UI elements
   addActionsForHtmlUI();
-
   document.onkeydown = keydown;
-
   initTextures();
-
+  
   // Register function (event handler) to be called on a mouse press
   canvas.onmousedown = click;
-  // canvas.onmousemove = click; 
   canvas.onmousemove = function (ev) { if (ev.buttons == 1) { click(ev) } };
 
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
-  // Clear <canvas>
-  // renderAllShapes();
   requestAnimationFrame(tick);
 }
 
@@ -372,44 +324,29 @@ var g_seconds = performance.now() / 1000.0 - g_startTime;
 
 // Called by browser repeatedly whenever its time
 function tick() {
-
   // Save the current time
   g_seconds = performance.now() / 1000.0 - g_startTime;
   // console.log(g_seconds);
-
   // // Print some debug information so we know we are running
   // console.log(performance.now());
-
   updateAnimationAngles();
-
   // Draw everything
   renderAllShapes();
-
   // Tell the browser to update again when it has time
   requestAnimationFrame(tick);
-
 }
-
-
 
 var g_shapesList = [];
 
-
 function click(ev) {
-
   // Extract the event click and return it in WebGL coordinates
-
   // Save current state
   let x2 = x;
   let y2 = y;
-
-
   let = [x, y] = convertCoordinatesEventToGL(ev);
-
   // Find
   x_rot = x_rot + ((x - x2) * 100)
   y_rot = y_rot + ((y - y2) * 100)
-
   // Create and store the new point
   let point;
   if (g_selectedType == POINT) {
@@ -425,11 +362,8 @@ function click(ev) {
   point.color = g_selectedColor.slice();
   point.size = g_selectedSize;
   g_shapesList.push(point);
-
-
   // Draw every shape that is supposed to be in the canvas
   renderAllShapes();
-
 }
 
 function convertCoordinatesEventToGL(ev) {
@@ -467,23 +401,20 @@ function renderAllShapes() {
   var scale = 0.35;
 
   var projMat = new Matrix4();
-  projMat.setPerspective(50, 1*canvas.width/canvas.height, 1, 100);
+  projMat.setPerspective(50, 1 * canvas.width / canvas.height, 1, 100);
   gl.uniformMatrix4fv(u_ProjectionMatrix, false, projMat.elements);
 
-  // console.log(    g_camera.eye.elements[0], g_camera.eye.elements[1], g_camera.eye.elements[2], 
-  //   g_camera.at.elements[0], g_camera.at.elements[1], g_camera.at.elements[2], 
-  //   g_camera.up.elements[0], g_camera.up.elements[1], g_camera.up.elements[2], );
   var viewMat = new Matrix4();
-  // viewMat.setLookAt(g_eye[0], g_eye[1], g_eye[2], g_at[0], g_at[1], g_at[2], g_up[0], g_up[1], g_up[2]);
+
   viewMat.setLookAt(
-    g_camera.eye.elements[0], g_camera.eye.elements[1], g_camera.eye.elements[2], 
-    g_camera.at.elements[0], g_camera.at.elements[1], g_camera.at.elements[2], 
-    g_camera.up.elements[0], g_camera.up.elements[1], g_camera.up.elements[2], 
+    g_camera.eye.elements[0], g_camera.eye.elements[1], g_camera.eye.elements[2],
+    g_camera.at.elements[0], g_camera.at.elements[1], g_camera.at.elements[2],
+    g_camera.up.elements[0], g_camera.up.elements[1], g_camera.up.elements[2],
   );
   gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
 
   // Pass the matrix to u_ModelMatrix attribute
-  var globalRotMat = new Matrix4().rotate(g_globalAngle, 0, 1, 0).rotate(g_upAndDown, 1, 0, 0).scale(scale, scale, scale).rotate(-x_rot, 0, 1, 0).rotate(y_rot, 1, 0, 0).rotate(180,0,1,0);
+  var globalRotMat = new Matrix4().rotate(g_globalAngle, 0, 1, 0).rotate(g_upAndDown, 1, 0, 0).scale(scale, scale, scale).rotate(-x_rot, 0, 1, 0).rotate(y_rot, 1, 0, 0).rotate(180, 0, 1, 0);
   gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
 
   // Draw the floor
@@ -497,10 +428,10 @@ function renderAllShapes() {
 
   // Draw the sky
   var sky = new Cube();
-  sky.color =   [1.0, 0.0, 0.0, 1.0];
-  sky.textureNum=0;
-  sky.matrix.scale(50,50,50);
-  sky.matrix.translate(-0.5,-0.5,-0.5);
+  sky.color = [1.0, 0.0, 0.0, 1.0];
+  sky.textureNum = 0;
+  sky.matrix.scale(50, 50, 50);
+  sky.matrix.translate(-0.5, -0.5, -0.5);
   sky.render();
 
 
@@ -630,14 +561,14 @@ function renderAllShapes() {
   bmo18.color = [247 / 255, 218 / 255, 80 / 255, 1];
   bmo18.matrix.scale(.06, .15, .1);
   bmo18.matrix.translate(3, 1, -.4);
-  bmo18.matrix.translate(0, 0, g_shiftAnimation/200);
+  bmo18.matrix.translate(0, 0, g_shiftAnimation / 200);
   bmo18.render();
   var bmo19 = new Cube();
   bmo19.matrix = new Matrix4(bmo1.matrix);
   bmo19.color = [247 / 255, 218 / 255, 80 / 255, 1];
   bmo19.matrix.scale(.2, .06, .1);
   bmo19.matrix.translate(0.555, 3.3, -.4);
-  bmo19.matrix.translate(0, 0, g_shiftAnimation/200);
+  bmo19.matrix.translate(0, 0, g_shiftAnimation / 200);
   bmo19.render();
 
 
@@ -647,14 +578,14 @@ function renderAllShapes() {
   bmo20.color = [5 / 255, 14 / 255, 113 / 255, 1];
   bmo20.matrix.scale(.15, .03, .1);
   bmo20.matrix.translate(0.3, 2, -0.15);
-  bmo20.matrix.translate(0, 0, g_shiftAnimation/350);
+  bmo20.matrix.translate(0, 0, g_shiftAnimation / 350);
   bmo20.render();
   var bmo21 = new Cube();
   bmo21.matrix = new Matrix4(bmo1.matrix);
   bmo21.color = [5 / 255, 14 / 255, 113 / 255, 1];
   bmo21.matrix.scale(.15, .03, .1);
   bmo21.matrix.translate(1.6, 2, -0.15);
-  bmo21.matrix.translate(0, 0, g_shiftAnimation/350);
+  bmo21.matrix.translate(0, 0, g_shiftAnimation / 350);
   bmo21.render();
 
 
@@ -666,7 +597,7 @@ function renderAllShapes() {
   bmo22.matrix.scale(.5, .5, 0.5);
   bmo22.matrix.translate(1.1, 0.9, -.2);
   bmo22.matrix.rotate(90, 1, 0, 0);
-  bmo22.matrix.translate(0, g_shiftAnimation/350, 0);
+  bmo22.matrix.translate(0, g_shiftAnimation / 350, 0);
   bmo22.render();
 
 
@@ -677,7 +608,7 @@ function renderAllShapes() {
   bmo23.matrix.scale(.2, .18, .4);
   bmo23.matrix.scale(.5, .5, .2);
   bmo23.matrix.translate(4.5, 2.5, -.5);
-  bmo23.matrix.translate(0, 0, g_shiftAnimation/200);
+  bmo23.matrix.translate(0, 0, g_shiftAnimation / 200);
   bmo23.render();
 
   // Green Circle Button
@@ -688,7 +619,7 @@ function renderAllShapes() {
   bmo24.matrix.scale(.3, .3, 0.5);
   bmo24.matrix.translate(2.9, 1.6, -.2);
   bmo24.matrix.rotate(90, 1, 0, 0);
-  bmo24.matrix.translate(0, g_shiftAnimation/350, 0);
+  bmo24.matrix.translate(0, g_shiftAnimation / 350, 0);
   bmo24.render();
 
   // Blue Circle Button
@@ -699,14 +630,14 @@ function renderAllShapes() {
   bmo25.matrix.scale(.15, .15, 0.5);
   bmo25.matrix.translate(6.5, 4.2, -.2);
   bmo25.matrix.rotate(90, 1, 0, 0);
-  bmo25.matrix.translate(0, g_shiftAnimation/350, 0);
+  bmo25.matrix.translate(0, g_shiftAnimation / 350, 0);
   bmo25.render();
 
   // Right leg
   var bmo26 = new Cube();
   bmo26.matrix = new Matrix4(bmo1.matrix);
   bmo26.color = [84 / 255, 120 / 255, 123 / 255, 1];
-  bmo26.matrix.rotate(g_redAngle/10, 0, 1, 0);
+  bmo26.matrix.rotate(g_redAngle / 10, 0, 1, 0);
   bmo26.matrix.rotate(g_rightLeg, 1, 0, 0);
   bmo26.matrix.scale(.1, .15, .1);
   bmo26.matrix.translate(2.5, -1, 4);
@@ -730,7 +661,7 @@ function renderAllShapes() {
   var bmo29 = new Cube();
   bmo29.matrix = new Matrix4(bmo1.matrix);
   bmo29.color = [84 / 255, 120 / 255, 123 / 255, 1];
-  bmo29.matrix.rotate(-g_redAngle/10, 0, 1, 0);
+  bmo29.matrix.rotate(-g_redAngle / 10, 0, 1, 0);
   bmo29.matrix.rotate(g_leftLeg, 1, 0, 0);
   bmo29.matrix.scale(.1, .15, .1);
   bmo29.matrix.translate(6, -1, 4);
@@ -950,7 +881,7 @@ function renderAllShapes() {
   bmo58.color = [21 / 255, 46 / 255, 38 / 255, 1];
   bmo58.matrix.scale(.05, .1, .1);
   bmo58.matrix.translate(5, 7.3, -0.05);
-  bmo58.matrix.translate(0, g_shiftAnimation/200, 0);
+  bmo58.matrix.translate(0, g_shiftAnimation / 200, 0);
   bmo58.render();
   var bmo59 = new Cube();
   bmo59.matrix = new Matrix4(bmo1.matrix);
@@ -971,7 +902,7 @@ function renderAllShapes() {
   bmo61.color = [21 / 255, 46 / 255, 38 / 255, 1];
   bmo61.matrix.scale(.05, .1, .1);
   bmo61.matrix.translate(13, 7.3, -0.05);
-  bmo61.matrix.translate(0, g_shiftAnimation/200, 0);
+  bmo61.matrix.translate(0, g_shiftAnimation / 200, 0);
   bmo61.render();
   var bmo62 = new Cube();
   bmo62.matrix = new Matrix4(bmo1.matrix);
