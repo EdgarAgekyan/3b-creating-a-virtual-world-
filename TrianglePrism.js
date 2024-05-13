@@ -29,35 +29,5 @@ class TrianglePrism {
         drawTriangle3D([1,0,0,  0.5,1,0, 0.5,1,1]);
         drawTriangle3D([1,0,0,  0.5,1,1, 1,0,1]);
 
-        // // Front of cube
-        // drawTriangle3D([0,0,0, 1,1,0, 1,0,0]);
-        // drawTriangle3D([0,0,0, 0,1,0, 1,1,0]);
-        
-        // gl.uniform4f(u_FragColor, rgba[0]*.9, rgba[1]*.9, rgba[2]*.9, rgba[3]);
-
-        // // Back of cube
-        // drawTriangle3D([0,0,1, 1,1,1, 1,0,1]);
-        // drawTriangle3D([0,0,1, 0,1,1, 1,1,1]);
-
-        // gl.uniform4f(u_FragColor, rgba[0]*.8, rgba[1]*.8, rgba[2]*.8, rgba[3]);
-
-
-        // // Top of cube
-        // drawTriangle3D([0,1,0, 0,1,1, 1,1,1]);
-        // drawTriangle3D([0,1,0, 1,1,1, 1,1,0]);
-
-        // // Bottom of cube
-        // drawTriangle3D([0,0,0, 0,0,1, 1,0,1]);
-        // drawTriangle3D([0,0,0, 1,0,1, 1,0,0]);
-
-        // // Left of Cube
-        // drawTriangle3D([0,0,0, 0,1,1, 0,0,1]);
-        // drawTriangle3D([0,0,0, 0,1,0, 0,1,1]);
-
-        // // // Right of Cube
-        // drawTriangle3D([1,0,0, 1,1,1, 1,0,1]);
-        // drawTriangle3D([1,0,0, 1,1,0, 1,1,1]);
-
-
     }
 }

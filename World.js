@@ -268,7 +268,7 @@ function initTextures() {
 
   image.onload = function() {sendImageToTEXTURE0(image);}
 
-  image.src = 'sky.jpg';
+  image.src = './resources/images/sky.jpg';
 
   var image2 = new Image();
   if (!image2) {
@@ -277,7 +277,7 @@ function initTextures() {
   }
   image2.onload = function() {sendImageToTEXTURE1(image2);}
 
-  image2.src = 'ground.jpg';
+  image2.src = './resources/images/ground.jpg';
 
 
   
