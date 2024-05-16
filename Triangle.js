@@ -1,7 +1,7 @@
 class Triangle {
   constructor() {
     this.type = "triangle";
-    this.positiion = [0.0, 0.0, 0.0];
+    this.position = [0.0, 0.0, 0.0];
     this.color = [1.0, 1.0, 1.0, 1.0];
     this.size = 5.0;
   }
@@ -83,8 +83,6 @@ function drawTriangle3D(vertices) {
     initTriangle3D();
   }
 
-  initTriangle3D();
-
   // gl.bindBuffer(gl.ARRAY_BUFFER, g_vertexBuffer);
   // gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, 0, 0);
   // gl.enableVertexAttribArray(a_Position);
@@ -98,8 +96,6 @@ function drawTriangle3D(vertices) {
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.DYNAMIC_DRAW);
 
   gl.drawArrays(gl.TRIANGLES, 0, n);
-
-  gl.disableVertexAttribArray(a_Position);
 
   // // Bind the buffer object to target
   // gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);

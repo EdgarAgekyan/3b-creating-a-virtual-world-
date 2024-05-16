@@ -411,7 +411,6 @@ function drawMap() {
         body.matrix.scale(0.4, 0.4, 0.4);
         body.matrix.translate(x-16, 0, y-16);
         body.renderfast();
-
       }
     }
   }
