@@ -388,20 +388,44 @@ function updateAnimationAngles() {
 }
 g_camera = new Camera();
 
-var g_eye = [0, 0, 3];
-var g_at = [0, 0, -100];
-var g_up = [0, 1, 0];
+var g_map = [
+  [1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 1, 1, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 1, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 1],
+]
+
+function drawMap() {
+  var body = new Cube();
+  for (i = 0; i < 2; i++) {
+    for (x = 0; x < 32; x++) {
+      for (y = 0; y < 32; y++)  {
+        // var body = new Cube();
+
+        body.color = [0.8, 1.0, 1.0, 1.0];
+        body.matrix.setTranslate(0, -0.75, 0);
+        body.matrix.scale(0.4, 0.4, 0.4);
+        body.matrix.translate(x-16, 0, y-16);
+        body.renderfast();
+
+      }
+    }
+  }
+}
+
 
 function renderAllShapes() {
 
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-  // Check the time at the start of this function
-  var startTime = performance.now();
   var scale = 0.35;
 
+  var startTime = performance.now();
+
   var projMat = new Matrix4();
-  projMat.setPerspective(50, 1 * canvas.width / canvas.height, 1, 100);
+  projMat.setPerspective(50, 1*canvas.width/canvas.height, 1, 100);
   gl.uniformMatrix4fv(u_ProjectionMatrix, false, projMat.elements);
 
   var viewMat = new Matrix4();
@@ -413,9 +437,38 @@ function renderAllShapes() {
   );
   gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
 
-  // Pass the matrix to u_ModelMatrix attribute
   var globalRotMat = new Matrix4().rotate(g_globalAngle, 0, 1, 0).rotate(g_upAndDown, 1, 0, 0).scale(scale, scale, scale).rotate(-x_rot, 0, 1, 0).rotate(y_rot, 1, 0, 0).rotate(180, 0, 1, 0);
   gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
+
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+  drawMap();
+
+  // My code: Professor's code is above
+  // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+  // // Check the time at the start of this function
+  // var startTime = performance.now();
+  // var scale = 0.35;
+
+  // var projMat = new Matrix4();
+  // projMat.setPerspective(50, 1 * canvas.width / canvas.height, 1, 100);
+  // gl.uniformMatrix4fv(u_ProjectionMatrix, false, projMat.elements);
+
+  // var viewMat = new Matrix4();
+
+  // viewMat.setLookAt(
+  //   g_camera.eye.elements[0], g_camera.eye.elements[1], g_camera.eye.elements[2],
+  //   g_camera.at.elements[0], g_camera.at.elements[1], g_camera.at.elements[2],
+  //   g_camera.up.elements[0], g_camera.up.elements[1], g_camera.up.elements[2],
+  // );
+  // gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
+
+  // // Pass the matrix to u_ModelMatrix attribute
+  // var globalRotMat = new Matrix4().rotate(g_globalAngle, 0, 1, 0).rotate(g_upAndDown, 1, 0, 0).scale(scale, scale, scale).rotate(-x_rot, 0, 1, 0).rotate(y_rot, 1, 0, 0).rotate(180, 0, 1, 0);
+  // gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
+
+  // drawMap();
 
   // Draw the floor
   var body = new Cube();
