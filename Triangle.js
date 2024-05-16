@@ -164,6 +164,8 @@ function drawTriangle3DUV(vertices, uv) {
 
   gl.drawArrays(gl.TRIANGLES, 0, n);
 
+  gl.disableVertexAttribArray(a_UV);
+
   g_vertexBuffer = null;
 
   // return n;
