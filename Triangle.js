@@ -65,7 +65,7 @@ function initTriangle3D() {
 
   gl.enableVertexAttribArray(a_Position);
 
-  
+
 }
 
 function drawTriangle3D(vertices) {

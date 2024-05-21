@@ -4,6 +4,69 @@ class Cube {
         this.color = [1.0, 1.0, 1.0, 1.0];
         this.matrix = new Matrix4();
         this.textureNum = -2;
+
+        this.cubeVerts32 = new Float32Array([
+            0,0,0, 1,1,0, 1,0,0,
+            0,0,0, 0,1,0, 1,1,0,
+            0,1,0, 0,1,1, 1,1,1,
+            0,1,0, 1,1,1, 1,1,0,
+
+            1,1,0, 1,1,1, 1,0,0,
+            1,0,0, 1,1,1, 1,0,1,
+            0,1,0, 0,1,1, 0,0,0,
+            0,0,0, 0,1,1, 0,0,1,
+     
+            0,0,0, 0,0,1, 1,0,1,
+            0,0,0, 1,0,1, 1,0,0,
+            0,0,1, 1,1,1, 1,0,1,
+            0,0,1, 0,1,1, 1,1,1,
+        ]);
+        this.cubeVerts = [
+            0,0,0, 1,1,0, 1,0,0,
+            0,0,0, 0,1,0, 1,1,0,
+            0,1,0, 0,1,1, 1,1,1,
+            0,1,0, 1,1,1, 1,1,0,
+
+            1,1,0, 1,1,1, 1,0,0,
+            1,0,0, 1,1,1, 1,0,1,
+            0,1,0, 0,1,1, 0,0,0,
+            0,0,0, 0,1,1, 0,0,1,
+     
+            0,0,0, 0,0,1, 1,0,1,
+            0,0,0, 1,0,1, 1,0,0,
+            0,0,1, 1,1,1, 1,0,1,
+            0,0,1, 0,1,1, 1,1,1,
+        ];
+
+        this.uvVerts32 = new Float32Array([
+            0,0, 1,1, 1,0,
+            0,0, 0,1, 1,1,
+            0,0, 1,1, 1,0,
+            0,0, 0,1, 1,1,
+            0,1, 0,1, 1,1,
+            0,1, 1,1, 1,1,
+            0,0, 0,0, 1,0,
+            0,0, 1,0, 1,0,
+            0,0, 0,1, 0,0,
+            0,0, 0,1, 0,1,
+            1,0, 1,1, 1,0,
+            1,0, 1,1, 1,1
+        ]);
+
+        // this.uvVerts = [
+        //     0,0, 1,1, 1,0,
+        //     0,0, 0,1, 1,1,
+        //     0,0, 1,1, 1,0,
+        //     0,0, 0,1, 1,1,
+        //     0,1, 0,1, 1,1,
+        //     0,1, 1,1, 1,1,
+        //     0,0, 0,0, 1,0,
+        //     0,0, 1,0, 1,0,
+        //     0,0, 0,1, 0,0,
+        //     0,0, 0,1, 0,1,
+        //     1,0, 1,1, 1,0,
+        //     1,0, 1,1, 1,1
+        // ];
     }
     render() {
         var rgba = this.color;
@@ -15,7 +78,7 @@ class Cube {
 
         // Pass the matrix to u_ModelMatrix attribute
         gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
-        
+
 
         // Front of cube
         drawTriangle3DUV([0,0,0, 1,1,0, 1,0,0], [0,0, 1,1, 1,0]);
@@ -96,7 +159,14 @@ class Cube {
 
         gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
 
+        if (g_vertexBuffer == null) {
+            initTriangle3D();
+        }
 
+        // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.cubeVerts), gl.DYNAMIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, this.cubeVerts32, gl.DYNAMIC_DRAW);
+
+        gl.drawArrays(gl.TRIANGLES, 0, 36);
 
     }
 }
