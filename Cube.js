@@ -38,19 +38,31 @@ class Cube {
             0,0,1, 0,1,1, 1,1,1,
         ];
 
+        // Found out I was doing uv coords wrong and fixed it here
         this.uvVerts32 = new Float32Array([
+            // Front
             0,0, 1,1, 1,0,
             0,0, 0,1, 1,1,
+            
+            // Back
             0,0, 1,1, 1,0,
             0,0, 0,1, 1,1,
-            0,1, 0,1, 1,1,
-            0,1, 1,1, 1,1,
-            0,0, 0,0, 1,0,
-            0,0, 1,0, 1,0,
-            0,0, 0,1, 0,0,
-            0,0, 0,1, 0,1,
-            1,0, 1,1, 1,0,
-            1,0, 1,1, 1,1
+            
+            // Top
+            0,0, 1,1, 1,0,
+            0,0, 0,1, 1,1,
+            
+            // Bottom
+            0,0, 1,1, 1,0,
+            0,0, 0,1, 1,1,
+            
+            // Right
+            0,0, 1,1, 1,0,
+            0,0, 0,1, 1,1,
+            
+            // Left
+            0,0, 1,1, 1,0,
+            0,0, 0,1, 1,1
         ]);
 
         // this.uvVerts = [
@@ -153,18 +165,30 @@ class Cube {
 
         var rgba = this.color;
 
-        gl.uniform1i(u_whichTexture, -2);
+        // No longer hardcoded texture
+        gl.uniform1i(u_whichTexture, this.textureNum);
 
         gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
-
         gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
 
-        if (g_vertexBuffer == null) {
+        if (g_vertexBuffer == null || g_uvBuffer == null) {
             initTriangle3D();
         }
 
-        // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.cubeVerts), gl.DYNAMIC_DRAW);
+        gl.bindBuffer(gl.ARRAY_BUFFER, g_vertexBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.cubeVerts32, gl.DYNAMIC_DRAW);
+
+        gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(a_Position);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, g_uvBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, this.uvVerts32, gl.DYNAMIC_DRAW);
+
+        gl.vertexAttribPointer(a_UV, 2, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(a_UV);        
+
+
+        // gl.bufferData(gl.ARRAY_BUFFER, this.cubeVerts32, gl.DYNAMIC_DRAW);
 
         gl.drawArrays(gl.TRIANGLES, 0, 36);
 

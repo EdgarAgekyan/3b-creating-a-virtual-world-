@@ -405,6 +405,7 @@ function drawMap() {
     for (x = 0; x < 32; x++) {
       for (y = 0; y < 32; y++)  {
         body.color = [0.8, 1.0, 1.0, 1.0];
+        body.textureNum = -3;
         body.matrix.setTranslate(0, -0.75, 0);
         body.matrix.scale(0.4, 0.4, 0.4);
         body.matrix.translate(x-16, 0, y-16);

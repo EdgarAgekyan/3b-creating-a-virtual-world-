@@ -52,6 +52,7 @@ function drawTriangle(vertices) {
 }
 
 var g_vertexBuffer = null;
+var g_uvBuffer = null;
 function initTriangle3D() {
   g_vertexBuffer = gl.createBuffer();
   if (!g_vertexBuffer ) {
@@ -60,9 +61,17 @@ function initTriangle3D() {
   }
 
   gl.bindBuffer(gl.ARRAY_BUFFER, g_vertexBuffer);
-
   gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(a_Position);
 
+  // Realized I had to do this with to get textures working the help of ChatGPT
+  g_uvBuffer = gl.createBuffer();
+  if (!g_uvBuffer ) {
+    console.log('Failed to create the buffer object');
+    return -1;
+  }
+  gl.bindBuffer(gl.ARRAY_BUFFER, g_uvBuffer);
+  gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(a_Position);
 
 
