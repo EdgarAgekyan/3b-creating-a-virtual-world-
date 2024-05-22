@@ -205,15 +205,15 @@ function addActionsForHtmlUI() {
   document.getElementById('angleSlide1').addEventListener('mousemove', function () { g_globalAngle = this.value; renderAllShapes(); });
   document.getElementById('angleSlide2').addEventListener('mousemove', function () { g_upAndDown = this.value; renderAllShapes(); });
 
-  document.getElementById('leftArm').addEventListener('mousemove', function () { g_leftArm = this.value; renderAllShapes(); });
-  document.getElementById('leftHand').addEventListener('mousemove', function () { g_leftHand = this.value; renderAllShapes(); });
-  document.getElementById('rightArm').addEventListener('mousemove', function () { g_rightArm = this.value; renderAllShapes(); });
-  document.getElementById('rightHand').addEventListener('mousemove', function () { g_rightHand = this.value; renderAllShapes(); });
+  // document.getElementById('leftArm').addEventListener('mousemove', function () { g_leftArm = this.value; renderAllShapes(); });
+  // document.getElementById('leftHand').addEventListener('mousemove', function () { g_leftHand = this.value; renderAllShapes(); });
+  // document.getElementById('rightArm').addEventListener('mousemove', function () { g_rightArm = this.value; renderAllShapes(); });
+  // document.getElementById('rightHand').addEventListener('mousemove', function () { g_rightHand = this.value; renderAllShapes(); });
 
-  document.getElementById('leftLeg').addEventListener('mousemove', function () { g_leftLeg = this.value; renderAllShapes(); });
-  document.getElementById('leftFoot').addEventListener('mousemove', function () { g_leftFoot = this.value; renderAllShapes(); });
-  document.getElementById('rightLeg').addEventListener('mousemove', function () { g_rightLeg = this.value; renderAllShapes(); });
-  document.getElementById('rightFoot').addEventListener('mousemove', function () { g_rightFoot = this.value; renderAllShapes(); });
+  // document.getElementById('leftLeg').addEventListener('mousemove', function () { g_leftLeg = this.value; renderAllShapes(); });
+  // document.getElementById('leftFoot').addEventListener('mousemove', function () { g_leftFoot = this.value; renderAllShapes(); });
+  // document.getElementById('rightLeg').addEventListener('mousemove', function () { g_rightLeg = this.value; renderAllShapes(); });
+  // document.getElementById('rightFoot').addEventListener('mousemove', function () { g_rightFoot = this.value; renderAllShapes(); });
 
   // For shift clicking:
   document.addEventListener("click", logKey);
