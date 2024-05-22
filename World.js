@@ -341,13 +341,13 @@ function movementScript() {
   if (d_move == 1) { // Right
     g_camera.eye.elements[0] += 0.2;
   }
-  else if (a_move == 1) { // Left
+  if (a_move == 1) { // Left
     g_camera.eye.elements[0] -= 0.2;
   }
-  else if (w_move == 1) { // Forward
+  if (w_move == 1) { // Forward
     g_camera.eye.elements[2] -= 0.2;
   }
-  else if (s_move == 1) { // Back
+  if (s_move == 1) { // Back
     g_camera.eye.elements[2] += 0.2;
   }
 }
