@@ -282,12 +282,49 @@ function sendImageToTEXTURE1(image) {
   console.log('finished loadTexture');
 }
 
+// I know this is very inefficient but eh, I'm just a guy >_<
+var w_move = 0;
+var a_move = 0;
+var s_move = 0;
+var d_move = 0;
 
 function main() {
   setupWebGL();
   connectVariablesToGLSL();
   addActionsForHtmlUI();
-  document.onkeydown = keydown;
+  // document.onkeydown = keydown;
+
+  document.addEventListener('keydown', (ev) => {
+    if (ev.keyCode == 68) { // Right
+      d_move = 1;
+    }
+    else if (ev.keyCode == 65) { // Left
+     a_move = 1;
+    }
+    else if (ev.keyCode == 87) { // Forward
+      w_move = 1;
+    }
+    else if (ev.keyCode == 83) { // Back
+      s_move = 1;
+    }
+  });
+
+  document.addEventListener('keyup', (ev) => {
+    if (ev.keyCode == 68) { // Right
+      d_move = 0;
+    }
+    else if (ev.keyCode == 65) { // Left
+     a_move = 0;
+    }
+    else if (ev.keyCode == 87) { // Forward
+      w_move = 0;
+    }
+    else if (ev.keyCode == 83) { // Back
+      s_move = 0;
+    }
+  });
+
+
   initTextures();
   
   // Register function (event handler) to be called on a mouse press
@@ -300,23 +337,61 @@ function main() {
   requestAnimationFrame(tick);
 }
 
-function keydown(ev) {
-  if (ev.keyCode == 39) {
+function movementScript() {
+  if (d_move == 1) { // Right
     g_camera.eye.elements[0] += 0.2;
   }
-  else if (ev.keyCode == 37) {
+  else if (a_move == 1) { // Left
     g_camera.eye.elements[0] -= 0.2;
   }
-  else if (ev.keyCode == 38) {
+  else if (w_move == 1) { // Forward
     g_camera.eye.elements[2] -= 0.2;
   }
-  else if (ev.keyCode == 40) {
+  else if (s_move == 1) { // Back
     g_camera.eye.elements[2] += 0.2;
   }
-
-  renderAllShapes();
-  console.log(ev.keyCode);
 }
+
+// function keyDownCheck() {
+
+// }
+
+// function keyUpCheck() {
+
+// }
+
+// function keydown(ev) {
+//   if (ev.keyCode == 68) { // Right
+//     g_camera.eye.elements[0] += 0.2;
+//   }
+//   else if (ev.keyCode == 65) { // Left
+//     g_camera.eye.elements[0] -= 0.2;
+//   }
+//   else if (ev.keyCode == 87) { // Forward
+//     g_camera.eye.elements[2] -= 0.2;
+//   }
+//   else if (ev.keyCode == 83) { // Back
+//     g_camera.eye.elements[2] += 0.2;
+  // }
+
+
+  // Arrow Keys
+  // if (ev.keyCode == 39) {
+  //   g_camera.eye.elements[0] += 0.2;
+  // }
+  // else if (ev.keyCode == 37) {
+  //   g_camera.eye.elements[0] -= 0.2;
+  // }
+  // else if (ev.keyCode == 38) {
+  //   g_camera.eye.elements[2] -= 0.2;
+  // }
+  // else if (ev.keyCode == 40) {
+  //   g_camera.eye.elements[2] += 0.2;
+  // }
+
+//   renderAllShapes();
+//   console.log(ev.keyCode);
+// }
 
 
 var g_startTime = performance.now() / 1000.0;
@@ -329,6 +404,7 @@ function tick() {
   // console.log(g_seconds);
   // // Print some debug information so we know we are running
   // console.log(performance.now());
+  movementScript();
   updateAnimationAngles();
   // Draw everything
   renderAllShapes();
