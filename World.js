@@ -287,6 +287,8 @@ var w_move = 0;
 var a_move = 0;
 var s_move = 0;
 var d_move = 0;
+var q_move = 0;
+var e_move = 0;
 
 function main() {
   setupWebGL();
@@ -307,6 +309,13 @@ function main() {
     else if (ev.keyCode == 83) { // Back
       s_move = 1;
     }
+    else if (ev.keyCode == 81) { // Rotate Left
+      q_move = 1;
+    }
+    else if (ev.keyCode == 69) { // Rotate Right
+      e_move = 1;
+    }
+
   });
 
   document.addEventListener('keyup', (ev) => {
@@ -321,6 +330,12 @@ function main() {
     }
     else if (ev.keyCode == 83) { // Back
       s_move = 0;
+    }
+    else if (ev.keyCode == 81) { // Rotate Left
+      q_move = 0;
+    }
+    else if (ev.keyCode == 69) { // Rotate Right
+      e_move = 0;
     }
   });
 
@@ -349,6 +364,12 @@ function movementScript() {
   }
   if (s_move == 1) { // Back
     g_camera.eye.elements[2] += 0.2;
+  }
+  if (q_move == 1) { // Back
+    g_camera.at.elements[0] -= 10;
+  }
+  if (e_move == 1) { // Back
+    g_camera.at.elements[0] += 10;
   }
 }
 
