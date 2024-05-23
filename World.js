@@ -340,11 +340,18 @@ function main() {
   });
 
 
+  // https://developer.mozilla.org/en-US/docs/Web/API/Pointer_Lock_API
+  // Rohan helped me find the documentation on how to do this.
+  canvas.addEventListener("click", async () => {
+    await canvas.requestPointerLock();
+  });
+
   initTextures();
   
   // Register function (event handler) to be called on a mouse press
-  canvas.onmousedown = click;
-  canvas.onmousemove = function (ev) { if (ev.buttons == 1) { click(ev) } };
+  // canvas.onmousedown = click;
+  // canvas.onmousemove = function (ev) { if (ev.buttons == 1) { click(ev) } };
+  canvas.onmousemove = click;
 
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -514,27 +521,38 @@ var g_shapesList = [];
 function click(ev) {
   // Extract the event click and return it in WebGL coordinates
   // Save current state
-  let x2 = x;
-  let y2 = y;
+  // let x2 = x;
+  // let y2 = y;
   let = [x, y] = convertCoordinatesEventToGL(ev);
+  
+  // console.log("X: ", x, "Y: ", y);
+  // rotateX(g_camera.at, ev.movementX / 100); 
+  // rotateY(g_camera.at,  ev.movementX y/100);
+  // g_camera.at.elements[0] += ev.movementX;
+  // rotateX(g_camera.at, ev.movementX);
+  rotateY(g_camera.at, -ev.movementX / 100);
+  rotateX(g_camera.at, -ev.movementY / 100);
+
+
+  // x_rot = x;
   // Find
-  x_rot = x_rot + ((x - x2) * 100)
-  y_rot = y_rot + ((y - y2) * 100)
-  // Create and store the new point
-  let point;
-  if (g_selectedType == POINT) {
-    point = new Point();
-  }
-  else if (g_selectedType == TRIANGLE) {
-    point = new Triangle();
-  }
-  else {
-    point = new Circle();
-  }
-  point.position = [x, y];
-  point.color = g_selectedColor.slice();
-  point.size = g_selectedSize;
-  g_shapesList.push(point);
+  // x_rot = x_rot + ((x - x2) * 100)
+  // y_rot = y_rot + ((y - y2) * 100)
+  // // Create and store the new point
+  // let point;
+  // if (g_selectedType == POINT) {
+  //   point = new Point();
+  // }
+  // else if (g_selectedType == TRIANGLE) {
+  //   point = new Triangle();
+  // }
+  // else {
+  //   point = new Circle();
+  // }
+  // point.position = [x, y];
+  // point.color = g_selectedColor.slice();
+  // point.size = g_selectedSize;
+  // g_shapesList.push(point);
   // Draw every shape that is supposed to be in the canvas
   renderAllShapes();
 }
@@ -608,7 +626,8 @@ function renderAllShapes() {
   );
   gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
 
-  var globalRotMat = new Matrix4().rotate(g_globalAngle, 0, 1, 0).rotate(g_upAndDown, 1, 0, 0).scale(scale, scale, scale).rotate(-x_rot, 0, 1, 0).rotate(y_rot, 1, 0, 0).rotate(180, 0, 1, 0);
+  // var globalRotMat = new Matrix4().rotate(g_globalAngle, 0, 1, 0).rotate(g_upAndDown, 1, 0, 0).scale(scale, scale, scale).rotate(-x_rot, 0, 1, 0).rotate(y_rot, 1, 0, 0).rotate(180, 0, 1, 0);
+  var globalRotMat = new Matrix4().scale(scale, scale, scale).rotate(-x_rot, 0, 1, 0).rotate(y_rot, 1, 0, 0);
   gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
 
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
