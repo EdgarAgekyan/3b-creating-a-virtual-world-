@@ -353,21 +353,70 @@ function main() {
 }
 
 function movementScript() {
+
+  // Got some help from ChatGPT for this forward function.
+  // I implemented the rest myself
+  // I know this would be a lot cleaner to implement in my Camera functiomn
+  // For now, I just focused on getting this working and will eventually hopefully
+  // clean into it's own seperate camera class.
+  let forward = new Vector3([
+    g_camera.at.elements[0] - g_camera.eye.elements[0],
+    g_camera.at.elements[1] - g_camera.eye.elements[1],
+    g_camera.at.elements[2] - g_camera.eye.elements[2]
+  ]);
+  forward.normalize();
+
+  let leftward = new Vector3([
+    g_camera.at.elements[0] - g_camera.eye.elements[0],
+    g_camera.at.elements[1] - g_camera.eye.elements[1],
+    g_camera.at.elements[2] - g_camera.eye.elements[2]
+  ]);
+  leftward.normalize();
+
+  let rightward = new Vector3([
+    g_camera.at.elements[0] - g_camera.eye.elements[0],
+    g_camera.at.elements[1] - g_camera.eye.elements[1],
+    g_camera.at.elements[2] - g_camera.eye.elements[2]
+  ]);
+  rightward.normalize();
+
+  let backwards = new Vector3([
+    g_camera.at.elements[0] - g_camera.eye.elements[0],
+    g_camera.at.elements[1] - g_camera.eye.elements[1],
+    g_camera.at.elements[2] - g_camera.eye.elements[2]
+  ]);
+  backwards.normalize();
+
+
   if (d_move == 1) { // Right
-    g_camera.eye.elements[0] += 0.2;
+    // g_camera.eye.elements[0] += 0.2;
+    g_camera.eye.elements[0] += rightward.elements[0] * 0.2;
+    g_camera.eye.elements[1] += rightward.elements[1] * 0.2;
+    g_camera.eye.elements[2] += rightward.elements[2] * 0.2;
+    // g_camera.eye.elements[0] += 0.2;
+    // g_camera.at.elements[0] += 0.2;
   }
   if (a_move == 1) { // Left
-    g_camera.eye.elements[0] -= 0.2;
+    // g_camera.eye.elements[0] -= 0.2;
+    g_camera.eye.elements[0] += leftward.elements[0] * 0.2;
+    g_camera.eye.elements[1] += leftward.elements[1] * 0.2;
+    g_camera.eye.elements[2] += leftward.elements[2] * 0.2;
+    // g_camera.eye.elements[0] += 0.2;
+    // g_camera.at.elements[0] -= 0.2;
   }
   if (w_move == 1) { // Forward
-    g_camera.eye.elements[2] -= 0.2;
+    g_camera.eye.elements[0] += forward.elements[0] * 0.2;
+    g_camera.eye.elements[1] += forward.elements[1] * 0.2;
+    g_camera.eye.elements[2] += forward.elements[2] * 0.2;
   }
   if (s_move == 1) { // Back
-    g_camera.eye.elements[2] += 0.2;
+    // g_camera.eye.elements[2] += 0.2;
+    g_camera.eye.elements[0] -= backwards.elements[0] * 0.2;
+    g_camera.eye.elements[1] -= backwards.elements[1] * 0.2;
+    g_camera.eye.elements[2] -= backwards.elements[2] * 0.2;
   }
   if (q_move == 1) { // Back
-    rotateY(g_camera.at, .02);
-
+    rotateY(g_camera.at, .02);  
   }
   if (e_move == 1) { // Back
     rotateY(g_camera.at, -.02);
