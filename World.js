@@ -367,6 +367,8 @@ function movementScript() {
   }
   if (q_move == 1) { // Back
     // g_camera.at.elements[0] -= 10;
+    rotateY(g_camera.at, .02);
+    rotateZ(g_camera.eye, .2);
 
   }
   if (e_move == 1) { // Back
@@ -389,7 +391,7 @@ function rotateX(vector, theta) {
 
 }
 
-function rotateY(vector) {
+function rotateY(vector, theta) {
   x = vector.elements[0];
   y = vector.elements[1];
   z = vector.elements[2];
@@ -399,7 +401,7 @@ function rotateY(vector) {
   vector.elements[2] = (-x * Math.sin(theta)) + (z * Math.cos(theta));
 }
 
-function rotateZ(vector) {
+function rotateZ(vector, theta) {
   x = vector.elements[0];
   y = vector.elements[1];
   z = vector.elements[2];
