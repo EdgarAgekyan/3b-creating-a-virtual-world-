@@ -67,75 +67,62 @@ function setupWebGL() {
 }
 
 function connectVariablesToGLSL() {
-
   if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
     console.log('Failed to intialize shaders.');
     return;
   }
-
   a_Position = gl.getAttribLocation(gl.program, 'a_Position');
   if (a_Position < 0) {
     console.log('Failed to get the storage location of a_Position');
     return;
   }
-
   a_UV = gl.getAttribLocation(gl.program, 'a_UV');
   if (a_UV < 0) {
     console.log('Failed to get the storage location of a_UV');
     return;
   }
-
   u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor');
   if (!u_FragColor) {
     console.log('Failed to get the storage location of u_FragColor');
     return;
   }
-
   u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
   if (!u_ModelMatrix) {
     console.log("Failed to get the storage location of u_ModelMatrix");
     return;
   }
-
   u_GlobalRotateMatrix = gl.getUniformLocation(gl.program, 'u_GlobalRotateMatrix');
   if (!u_GlobalRotateMatrix) {
     console.log('Failed to get the storage location of u_GlobalRotateMatrix');
     return;
   }
-
   u_ViewMatrix = gl.getUniformLocation(gl.program, 'u_ViewMatrix');
   if (!u_ViewMatrix) {
     console.log('Failed to get the storage location of u_ViewMatrix');
     return;
   }
-
   u_ProjectionMatrix = gl.getUniformLocation(gl.program, 'u_ProjectionMatrix');
   if (!u_ProjectionMatrix) {
     console.log('Failed to get the storage location of u_ProjectionMatrix');
     return;
   }
-
   u_Sampler0 = gl.getUniformLocation(gl.program, 'u_Sampler0');
   if (!u_Sampler0) {
     console.log('Failed to get the storage location of u_Sampler0');
     return;
   }
-
   u_Sampler1 = gl.getUniformLocation(gl.program, 'u_Sampler1');
   if (!u_Sampler1) {
     console.log('Failed to get the storage location of u_Sampler1');
     return;
   }
-
   u_whichTexture = gl.getUniformLocation(gl.program, 'u_whichTexture');
   if (!u_whichTexture) {
     console.log('Failed to get the storage location of u_whichTexture');
     return;
   }
-
   var identityM = new Matrix4();
   gl.uniformMatrix4fv(u_ModelMatrix, false, identityM.elements);
-
 }
 
 // Consants
@@ -176,10 +163,9 @@ let g_camera;
 
 // Set up actions for the HTML UI elements
 function addActionsForHtmlUI() {
-
-  document.getElementById('animationYellowOnButton').onclick = function () { g_yellowAnimation = true; }
-  document.getElementById('animationYellowOffButton').onclick = function () { g_yellowAnimation = false; }
-
+  // Not needed at the moment
+  // document.getElementById('animationYellowOnButton').onclick = function () { g_yellowAnimation = true; }
+  // document.getElementById('animationYellowOffButton').onclick = function () { g_yellowAnimation = false; }
   document.getElementById('clear').onclick = function () {
     g_globalAngle = 0,
       g_upAndDown = 0,
@@ -202,32 +188,22 @@ function addActionsForHtmlUI() {
       g_yellowAngle = 0;
   }
 
-  document.getElementById('angleSlide1').addEventListener('mousemove', function () { g_globalAngle = this.value; renderAllShapes(); });
-  document.getElementById('angleSlide2').addEventListener('mousemove', function () { g_upAndDown = this.value; renderAllShapes(); });
+  // Not needed at the moment
+  // document.getElementById('angleSlide1').addEventListener('mousemove', function () { g_globalAngle = this.value; renderAllShapes(); });
+  // document.getElementById('angleSlide2').addEventListener('mousemove', function () { g_upAndDown = this.value; renderAllShapes(); });
 
-  // document.getElementById('leftArm').addEventListener('mousemove', function () { g_leftArm = this.value; renderAllShapes(); });
-  // document.getElementById('leftHand').addEventListener('mousemove', function () { g_leftHand = this.value; renderAllShapes(); });
-  // document.getElementById('rightArm').addEventListener('mousemove', function () { g_rightArm = this.value; renderAllShapes(); });
-  // document.getElementById('rightHand').addEventListener('mousemove', function () { g_rightHand = this.value; renderAllShapes(); });
-
-  // document.getElementById('leftLeg').addEventListener('mousemove', function () { g_leftLeg = this.value; renderAllShapes(); });
-  // document.getElementById('leftFoot').addEventListener('mousemove', function () { g_leftFoot = this.value; renderAllShapes(); });
-  // document.getElementById('rightLeg').addEventListener('mousemove', function () { g_rightLeg = this.value; renderAllShapes(); });
-  // document.getElementById('rightFoot').addEventListener('mousemove', function () { g_rightFoot = this.value; renderAllShapes(); });
-
+  // Not needed at the moment
   // For shift clicking:
-  document.addEventListener("click", logKey);
-
-  function logKey(e) {
-    if (e.shiftKey) {
-      g_shiftClick = 1;
-    }
-  }
+  // document.addEventListener("click", logKey);
+  // function logKey(e) {
+  //   if (e.shiftKey) {
+  //     g_shiftClick = 1;
+  //   }
+  // }
 
 }
 
 function initTextures() {
-
   // Sky
   var image = new Image();
   if (!image) {
@@ -254,14 +230,12 @@ function sendImageToTEXTURE0(image) {
     console.log('Failed to create the texture object');
     return false;
   }
-
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
   gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, texture);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
   gl.uniform1i(u_Sampler0, 0);
-
   console.log('finished loadTexture');
 }
 
@@ -271,18 +245,16 @@ function sendImageToTEXTURE1(image) {
     console.log('Failed to create the groundTexture object');
     return false;
   }
-
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
   gl.activeTexture(gl.TEXTURE1);
   gl.bindTexture(gl.TEXTURE_2D, groundTexture);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
   gl.uniform1i(u_Sampler1, 1);
-
   console.log('finished loadTexture');
 }
 
-// I know this is very inefficient but eh, I'm just a guy >_<
+// There is probably a better way to do this but this works for now
 var w_move = 0;
 var a_move = 0;
 var s_move = 0;
@@ -294,7 +266,6 @@ function main() {
   setupWebGL();
   connectVariablesToGLSL();
   addActionsForHtmlUI();
-  // document.onkeydown = keydown;
 
   document.addEventListener('keydown', (ev) => {
     if (ev.keyCode == 68) { // Right
@@ -315,7 +286,6 @@ function main() {
     else if (ev.keyCode == 69) { // Rotate Right
       e_move = 1;
     }
-
   });
 
   document.addEventListener('keyup', (ev) => {
@@ -339,7 +309,6 @@ function main() {
     }
   });
 
-
   // https://developer.mozilla.org/en-US/docs/Web/API/Pointer_Lock_API
   // Rohan helped me find the documentation on how to do this.
   canvas.addEventListener("click", async () => {
@@ -348,9 +317,7 @@ function main() {
 
   initTextures();
   
-  // Register function (event handler) to be called on a mouse press
-  // canvas.onmousedown = click;
-  // canvas.onmousemove = function (ev) { if (ev.buttons == 1) { click(ev) } };
+  // Register function (event handler) to be called as the cursor moves across the screen
   canvas.onmousemove = click;
 
   // Specify the color for clearing <canvas>
@@ -456,48 +423,6 @@ function rotateZ(vector, theta) {
   vector.elements[2] = z;
 }
 
-// function keyDownCheck() {
-
-// }
-
-// function keyUpCheck() {
-
-// }
-
-// function keydown(ev) {
-//   if (ev.keyCode == 68) { // Right
-//     g_camera.eye.elements[0] += 0.2;
-//   }
-//   else if (ev.keyCode == 65) { // Left
-//     g_camera.eye.elements[0] -= 0.2;
-//   }
-//   else if (ev.keyCode == 87) { // Forward
-//     g_camera.eye.elements[2] -= 0.2;
-//   }
-//   else if (ev.keyCode == 83) { // Back
-//     g_camera.eye.elements[2] += 0.2;
-  // }
-
-
-  // Arrow Keys
-  // if (ev.keyCode == 39) {
-  //   g_camera.eye.elements[0] += 0.2;
-  // }
-  // else if (ev.keyCode == 37) {
-  //   g_camera.eye.elements[0] -= 0.2;
-  // }
-  // else if (ev.keyCode == 38) {
-  //   g_camera.eye.elements[2] -= 0.2;
-  // }
-  // else if (ev.keyCode == 40) {
-  //   g_camera.eye.elements[2] += 0.2;
-  // }
-
-//   renderAllShapes();
-//   console.log(ev.keyCode);
-// }
-
-
 var g_startTime = performance.now() / 1000.0;
 var g_seconds = performance.now() / 1000.0 - g_startTime;
 
@@ -520,40 +445,31 @@ var g_shapesList = [];
 
 function click(ev) {
   // Extract the event click and return it in WebGL coordinates
-  // Save current state
-  // let x2 = x;
-  // let y2 = y;
-  let = [x, y] = convertCoordinatesEventToGL(ev);
+  // let = [x, y] = convertCoordinatesEventToGL(ev);
   
-  // console.log("X: ", x, "Y: ", y);
-  // rotateX(g_camera.at, ev.movementX / 100); 
-  // rotateY(g_camera.at,  ev.movementX y/100);
+  // x_rot += ev.movementX;
+  // y_rot += ev.movementY;
+
   // g_camera.at.elements[0] += ev.movementX;
-  // rotateX(g_camera.at, ev.movementX);
-  rotateY(g_camera.at, -ev.movementX / 100);
-  rotateX(g_camera.at, -ev.movementY / 100);
+  // g_camera.at.elements[1] += ev.movementY;
+  // g_camera.at.elements[2] += ev.movementX;
 
 
-  // x_rot = x;
-  // Find
-  // x_rot = x_rot + ((x - x2) * 100)
-  // y_rot = y_rot + ((y - y2) * 100)
-  // // Create and store the new point
-  // let point;
-  // if (g_selectedType == POINT) {
-  //   point = new Point();
+
+  // rotateY(g_camera.at, -ev.movementX / 100);
+
+  // console.log(g_camera.at.elements[0], g_camera.at.elements[1], g_camera.at.elements[2]);
+  
+  // if (g_camera.at.elements[1] >= 98) {
+  //   rotateX(g_camera.at, -.1);
   // }
-  // else if (g_selectedType == TRIANGLE) {
-  //   point = new Triangle();
+  // else if (g_camera.at.elements[1] <= -98) {
+  //   rotateX(g_camera.at, .1);
   // }
   // else {
-  //   point = new Circle();
+  //   rotateX(g_camera.at, -ev.movementY / 100);
   // }
-  // point.position = [x, y];
-  // point.color = g_selectedColor.slice();
-  // point.size = g_selectedSize;
-  // g_shapesList.push(point);
-  // Draw every shape that is supposed to be in the canvas
+
   renderAllShapes();
 }
 
@@ -633,32 +549,6 @@ function renderAllShapes() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   drawMap();
-
-  // My code: Professor's code is above
-  // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-  // // Check the time at the start of this function
-  // var startTime = performance.now();
-  // var scale = 0.35;
-
-  // var projMat = new Matrix4();
-  // projMat.setPerspective(50, 1 * canvas.width / canvas.height, 1, 100);
-  // gl.uniformMatrix4fv(u_ProjectionMatrix, false, projMat.elements);
-
-  // var viewMat = new Matrix4();
-
-  // viewMat.setLookAt(
-  //   g_camera.eye.elements[0], g_camera.eye.elements[1], g_camera.eye.elements[2],
-  //   g_camera.at.elements[0], g_camera.at.elements[1], g_camera.at.elements[2],
-  //   g_camera.up.elements[0], g_camera.up.elements[1], g_camera.up.elements[2],
-  // );
-  // gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
-
-  // // Pass the matrix to u_ModelMatrix attribute
-  // var globalRotMat = new Matrix4().rotate(g_globalAngle, 0, 1, 0).rotate(g_upAndDown, 1, 0, 0).scale(scale, scale, scale).rotate(-x_rot, 0, 1, 0).rotate(y_rot, 1, 0, 0).rotate(180, 0, 1, 0);
-  // gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
-
-  // drawMap();
 
   // Draw the floor
   var body = new Cube();
