@@ -366,11 +366,47 @@ function movementScript() {
     g_camera.eye.elements[2] += 0.2;
   }
   if (q_move == 1) { // Back
-    g_camera.at.elements[0] -= 10;
+    // g_camera.at.elements[0] -= 10;
+
   }
   if (e_move == 1) { // Back
-    g_camera.at.elements[0] += 10;
+    // g_camera.at.elements[0] += 10;
   }
+}
+
+// Source:
+// https://stackoverflow.com/questions/14607640/rotating-a-vector-in-3d-space
+
+function rotateX(vector, theta) {
+  // These are copies, not references
+  x = vector.elements[0];
+  y = vector.elements[1];
+  z = vector.elements[2];
+
+  vector.elements[0] = x;
+  vector.elements[1] = (y * Math.cos(theta)) - (z * Math.sin(theta));
+  vector.elements[2] = (y * Math.sin(theta)) + (z * Math.cos(theta));
+
+}
+
+function rotateY(vector) {
+  x = vector.elements[0];
+  y = vector.elements[1];
+  z = vector.elements[2];
+
+  vector.elements[0] = (x * Math.cos(theta)) + (z * Math.sin(theta));
+  vector.elements[1] = y
+  vector.elements[2] = (-x * Math.sin(theta)) + (z * Math.cos(theta));
+}
+
+function rotateZ(vector) {
+  x = vector.elements[0];
+  y = vector.elements[1];
+  z = vector.elements[2];
+
+  vector.elements[0] = (x * Math.cos(theta)) - (y * Math.sin(theta));
+  vector.elements[1] = (x * Math.sin(theta)) + (y * Math.cos(theta));
+  vector.elements[2] = z;
 }
 
 // function keyDownCheck() {
