@@ -366,13 +366,11 @@ function movementScript() {
     g_camera.eye.elements[2] += 0.2;
   }
   if (q_move == 1) { // Back
-    // g_camera.at.elements[0] -= 10;
     rotateY(g_camera.at, .02);
-    rotateZ(g_camera.eye, .2);
 
   }
   if (e_move == 1) { // Back
-    // g_camera.at.elements[0] += 10;
+    rotateY(g_camera.at, -.02);
   }
 }
 
