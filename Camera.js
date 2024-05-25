@@ -44,26 +44,18 @@ class Camera {
     moveBackwards() {
         this.backwardsVec = new Vector3(this.eye.elements);
 
-        // f = at - eye
-        this.backwardsVec.elements[0] -= this.at.elements[0];
-        this.backwardsVec.elements[1] -= this.at.elements[1];
-        this.backwardsVec.elements[2] -= this.at.elements[2];
+        // f = eye - at
+        this.backwardsVec.sub(this.at);
 
         this.backwardsVec.normalize();
 
         // Scale speed
-        this.backwardsVec.elements[0] *= this.speed;
-        this.backwardsVec.elements[1] *= this.speed;
-        this.backwardsVec.elements[2] *= this.speed;
+        this.backwardsVec.mul(this.speed);
 
         // Add forward vector to eye and center
-        this.eye.elements[0] += this.backwardsVec.elements[0];
-        this.eye.elements[1] += this.backwardsVec.elements[1];
-        this.eye.elements[2] += this.backwardsVec.elements[2];
-        this.at.elements[0] += this.backwardsVec.elements[0];
-        this.at.elements[1] += this.backwardsVec.elements[1];
-        this.at.elements[2] += this.backwardsVec.elements[2];
-
+        this.eye.add(this.backwardsVec);
+        this.at.add(this.backwardsVec);
+        
         this.updateLookAt();        
     }
 
