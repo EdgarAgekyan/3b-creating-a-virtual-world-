@@ -336,95 +336,96 @@ function movementScript() {
   // I know this would be a lot cleaner to implement in my Camera functiomn
   // For now, I just focused on getting this working and will eventually hopefully
   // clean into it's own seperate camera class.
-  let forward = new Vector3([
-    g_camera.at.elements[0] - g_camera.eye.elements[0],
-    g_camera.at.elements[1] - g_camera.eye.elements[1],
-    g_camera.at.elements[2] - g_camera.eye.elements[2]
-  ]);
-  forward.normalize();
+  // let forward = new Vector3([
+  //   g_camera.at.elements[0] - g_camera.eye.elements[0],
+  //   g_camera.at.elements[1] - g_camera.eye.elements[1],
+  //   g_camera.at.elements[2] - g_camera.eye.elements[2]
+  // ]);
+  // forward.normalize();
 
-  let leftward = new Vector3([
-    -forward.elements[2],
-    0,
-    forward.elements[0]
-  ]);
-  leftward.normalize();
+  // let leftward = new Vector3([
+  //   -forward.elements[2],
+  //   0,
+  //   forward.elements[0]
+  // ]);
+  // leftward.normalize();
 
-  let rightward = new Vector3([
-    forward.elements[2],
-    0,
-    -forward.elements[0]
-  ]);
-  rightward.normalize();
+  // let rightward = new Vector3([
+  //   forward.elements[2],
+  //   0,
+  //   -forward.elements[0]
+  // ]);
+  // rightward.normalize();
 
-  let backwards = new Vector3([
-    g_camera.at.elements[0] - g_camera.eye.elements[0],
-    g_camera.at.elements[1] - g_camera.eye.elements[1],
-    g_camera.at.elements[2] - g_camera.eye.elements[2]
-  ]);
-  backwards.normalize();
+  // let backwards = new Vector3([
+  //   g_camera.at.elements[0] - g_camera.eye.elements[0],
+  //   g_camera.at.elements[1] - g_camera.eye.elements[1],
+  //   g_camera.at.elements[2] - g_camera.eye.elements[2]
+  // ]);
+  // backwards.normalize();
 
   if (d_move == 1) { // Right
-    g_camera.eye.elements[0] += leftward.elements[0] * 0.2;
-    g_camera.eye.elements[2] += leftward.elements[2] * 0.2;
+    // g_camera.eye.elements[0] += leftward.elements[0] * 0.2;
+    // g_camera.eye.elements[2] += leftward.elements[2] * 0.2;
   }
   if (a_move == 1) { // Left
-    g_camera.eye.elements[0] += rightward.elements[0] * 0.2;
-    g_camera.eye.elements[2] += rightward.elements[2] * 0.2;
+    // g_camera.eye.elements[0] += rightward.elements[0] * 0.2;
+    // g_camera.eye.elements[2] += rightward.elements[2] * 0.2;
   }
   if (w_move == 1) { // Forward
-    g_camera.eye.elements[0] += forward.elements[0] * 0.2;
-    g_camera.eye.elements[1] += forward.elements[1] * 0.2;
-    g_camera.eye.elements[2] += forward.elements[2] * 0.2;
+    g_camera.moveForward();
+    // g_camera.eye.elements[0] += forward.elements[0] * 0.2;
+    // g_camera.eye.elements[1] += forward.elements[1] * 0.2;
+    // g_camera.eye.elements[2] += forward.elements[2] * 0.2;
   }
   if (s_move == 1) { // Back
     // g_camera.eye.elements[2] += 0.2;
-    g_camera.eye.elements[0] -= backwards.elements[0] * 0.2;
-    g_camera.eye.elements[1] -= backwards.elements[1] * 0.2;
-    g_camera.eye.elements[2] -= backwards.elements[2] * 0.2;
+    // g_camera.eye.elements[0] -= backwards.elements[0] * 0.2;
+    // g_camera.eye.elements[1] -= backwards.elements[1] * 0.2;
+    // g_camera.eye.elements[2] -= backwards.elements[2] * 0.2;
   }
   if (q_move == 1) { // Back
-    rotateY(g_camera.at, .04);  
+    // rotateY(g_camera.at, .04);  
   }
   if (e_move == 1) { // Back
-    rotateY(g_camera.at, -.04);
+    // rotateY(g_camera.at, -.04);
   }
 }
 
 // Source:
 // https://stackoverflow.com/questions/14607640/rotating-a-vector-in-3d-space
 
-function rotateX(vector, theta) {
-  // These are copies, not references
-  x = vector.elements[0];
-  y = vector.elements[1];
-  z = vector.elements[2];
-  //Math.min(89, x) Math.max(-89...)
-  vector.elements[0] = x;
-  vector.elements[1] = Math.max(-89, Math.min(89, (y * Math.cos(theta)) - (z * Math.sin(theta))));
-  vector.elements[2] = (y * Math.sin(theta)) + (z * Math.cos(theta));
+// function rotateX(vector, theta) {
+//   // These are copies, not references
+//   x = vector.elements[0];
+//   y = vector.elements[1];
+//   z = vector.elements[2];
+//   //Math.min(89, x) Math.max(-89...)
+//   vector.elements[0] = x;
+//   vector.elements[1] = Math.max(-89, Math.min(89, (y * Math.cos(theta)) - (z * Math.sin(theta))));
+//   vector.elements[2] = (y * Math.sin(theta)) + (z * Math.cos(theta));
 
-}
+// }
 
-function rotateY(vector, theta) {
-  x = vector.elements[0];
-  y = vector.elements[1];
-  z = vector.elements[2];
+// function rotateY(vector, theta) {
+//   x = vector.elements[0];
+//   y = vector.elements[1];
+//   z = vector.elements[2];
 
-  vector.elements[0] = (x * Math.cos(theta)) + (z * Math.sin(theta));
-  vector.elements[1] = y
-  vector.elements[2] = (-x * Math.sin(theta)) + (z * Math.cos(theta));
-}
+//   vector.elements[0] = (x * Math.cos(theta)) + (z * Math.sin(theta));
+//   vector.elements[1] = y
+//   vector.elements[2] = (-x * Math.sin(theta)) + (z * Math.cos(theta));
+// }
 
-function rotateZ(vector, theta) {
-  x = vector.elements[0];
-  y = vector.elements[1];
-  z = vector.elements[2];
+// function rotateZ(vector, theta) {
+//   x = vector.elements[0];
+//   y = vector.elements[1];
+//   z = vector.elements[2];
 
-  vector.elements[0] = (x * Math.cos(theta)) - (y * Math.sin(theta));
-  vector.elements[1] = (x * Math.sin(theta)) + (y * Math.cos(theta));
-  vector.elements[2] = z;
-}
+//   vector.elements[0] = (x * Math.cos(theta)) - (y * Math.sin(theta));
+//   vector.elements[1] = (x * Math.sin(theta)) + (y * Math.cos(theta));
+//   vector.elements[2] = z;
+// }
 
 var g_startTime = performance.now() / 1000.0;
 var g_seconds = performance.now() / 1000.0 - g_startTime;
@@ -459,7 +460,7 @@ function click(ev) {
   // g_camera.at.elements[2] += ev.movementX;
 
 
-  rotateY(g_camera.at, -ev.movementX/100); 
+  // rotateY(g_camera.at, -ev.movementX/100); 
   
   // console.log(g_camera.at.elements[1]);
   // if (!(g_camera.at.elements[1] >= 88 && ev.movementY < 0)) {
@@ -490,7 +491,7 @@ function click(ev) {
   //   rotateX(g_camera.at, -ev.movementY / 100);
   // }
 
-  renderAllShapes();
+  // renderAllShapes();
 }
 
 function convertCoordinatesEventToGL(ev) {
@@ -538,7 +539,7 @@ var g_map2 = [
 ]
 
 function drawMap() {
-  g_camera.forward();
+  // g_camera.moveForward();
   var body = new Cube();
   for (x = 0; x < 8; x++) {
     for (y = 0; y < 8; y++) {
