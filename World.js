@@ -53,10 +53,13 @@ let u_whichTexture;
 let texture;
 let groundTexture;
 let u_Sampler1;
+let g_camera;
 
 function setupWebGL() {
   // Retrieve <canvas> element
   canvas = document.getElementById('webgl');
+  g_camera = new Camera(canvas);
+
   // Get the rendering context for WebGL
   gl = canvas.getContext("webgl", { preserveDrawingBuffer: true });
   if (!gl) {
@@ -159,7 +162,7 @@ let g_rightFoot = 0;
 let g_shiftClick = 0;
 let g_shiftAnimation = 0;
 
-let g_camera;
+// let g_camera = new Camera(canvas);
 
 // Set up actions for the HTML UI elements
 function addActionsForHtmlUI() {
@@ -512,7 +515,7 @@ function updateAnimationAngles() {
 }
 
 
-g_camera = new Camera();
+// g_camera = new Camera(canvas);
 var g_map = [
   [1, 0, 1, 0, 1, 0, 1, 0],
   [0, 1, 0, 1, 0, 1, 0, 1],
@@ -535,6 +538,7 @@ var g_map2 = [
 ]
 
 function drawMap() {
+  g_camera.forward();
   var body = new Cube();
   for (x = 0; x < 8; x++) {
     for (y = 0; y < 8; y++) {
