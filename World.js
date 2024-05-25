@@ -396,9 +396,9 @@ function rotateX(vector, theta) {
   x = vector.elements[0];
   y = vector.elements[1];
   z = vector.elements[2];
-
+  //Math.min(89, x) Math.max(-89...)
   vector.elements[0] = x;
-  vector.elements[1] = (y * Math.cos(theta)) - (z * Math.sin(theta));
+  vector.elements[1] = Math.max(-89, Math.min(89, (y * Math.cos(theta)) - (z * Math.sin(theta))));
   vector.elements[2] = (y * Math.sin(theta)) + (z * Math.cos(theta));
 
 }
@@ -449,10 +449,27 @@ function click(ev) {
   
   // x_rot += ev.movementX;
   // y_rot += ev.movementY;
+  
 
   // g_camera.at.elements[0] += ev.movementX;
   // g_camera.at.elements[1] += ev.movementY;
   // g_camera.at.elements[2] += ev.movementX;
+
+
+  rotateY(g_camera.at, -ev.movementX/100); 
+  
+  // console.log(g_camera.at.elements[1]);
+  // if (!(g_camera.at.elements[1] >= 88 && ev.movementY < 0)) {
+  //   rotateX(g_camera.at, -ev.movementY / 100); 
+  // }
+
+  // if ((!(g_camera.at.elements[1] <= -89 && ev.movementY >= 0)) &&
+  //     (!(g_camera.at.elements[1] >= 89 && ev.movementY < 0))) {
+  //   console.log("Log", g_camera.at.elements[1], ev.movementY);
+  //   rotateX(g_camera.at, -ev.movementY / 100); 
+  // }
+
+  // rotateX(g_camera.at, -ev.movementY / 100); 
 
 
 
@@ -493,34 +510,93 @@ function updateAnimationAngles() {
     g_shiftAnimation = (45 * Math.sin(g_seconds));
   }
 }
+
+
 g_camera = new Camera();
 var g_map = [
-  [1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 0, 1, 1, 0, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 0, 0, 1, 0, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 1, 0, 1, 0, 1, 0],
+  [0, 1, 0, 1, 0, 1, 0, 1],
+  [1, 0, 1, 0, 1, 0, 1, 0],
+  [0, 1, 0, 1, 0, 1, 0, 1],
+  [1, 0, 1, 0, 1, 0, 1, 0],
+  [0, 1, 0, 1, 0, 1, 0, 1],
+  [1, 0, 1, 0, 1, 0, 1, 0],
+  [0, 1, 0, 1, 0, 1, 0, 1],
+]
+var g_map2 = [
+  [0, 1, 0, 1, 0, 1, 0, 1],
+  [1, 0, 1, 0, 1, 0, 1, 0],
+  [0, 1, 0, 1, 0, 1, 0, 1],
+  [1, 0, 1, 0, 1, 0, 1, 0],
+  [0, 1, 0, 1, 0, 1, 0, 1],
+  [1, 0, 1, 0, 1, 0, 1, 0],
+  [0, 1, 0, 1, 0, 1, 0, 1],
+  [1, 0, 1, 0, 1, 0, 1, 0],
 ]
 
 function drawMap() {
   var body = new Cube();
-  body.textureNum = -3; // setting texture
-  for (i = 0; i < 2; i++) {
-    for (x = 0; x < 32; x++) {
-      for (y = 0; y < 32; y++)  {
-        body.color = [0.8, 1.0, 1.0, 1.0];
-        body.textureNum = -3;
-        body.matrix.setTranslate(0, -0.75, 0);
-        body.matrix.scale(0.4, 0.4, 0.4);
-        body.matrix.translate(x-16, 0, y-16);
-        body.renderfaster();
+  for (x = 0; x < 8; x++) {
+    for (y = 0; y < 8; y++) {
+      if (g_map[x][y] == 1) {
+        body.matrix.setTranslate(0, -1, 0);
+        body.color = [1.0, 1.0, 1.0, 1.0];
+        body.matrix.translate(x-4, -0.75, y-4);
+        body.render();
+      }
+      else if (g_map2[x][y] == 1) {
+        body.matrix.setTranslate(0, -1, 0);
+        body.color = [0.0, 0.0, 0.0, 1.0];
+        body.matrix.translate(x-4, -0.75, y-4);
+        body.render();
       }
     }
   }
 }
+
+// Template to use as reference:
+// g_camera = new Camera();
+// var g_map = [
+//   [1, 1, 1, 1, 1, 1, 1, 1],
+//   [1, 0, 0, 0, 0, 0, 0, 1],
+//   [1, 0, 0, 0, 0, 0, 0, 1],
+//   [1, 0, 0, 1, 1, 0, 0, 1],
+//   [1, 0, 0, 0, 0, 0, 0, 1],
+//   [1, 0, 0, 0, 0, 0, 0, 1],
+//   [1, 0, 0, 0, 1, 0, 0, 1],
+//   [1, 0, 0, 0, 0, 0, 0, 1],
+// ]
+
+// function drawMap() {
+//   var body = new Cube();
+//   for (x = 0; x < 8; x++) {
+//     for (y = 0; y < 8; y++) {
+//       if (g_map[x][y] == 1) {
+//         body.matrix.setTranslate(0, -1, 0);
+//         body.color = [1.0, 1.0, 1.0, 1.0];
+//         body.matrix.translate(x-4, -0.75, y-4);
+//         body.render();
+//       }
+//     }
+//   }
+// }
+
+
+  // var body = new Cube();
+  // body.textureNum = -3; // setting texture
+  // for (i = 0; i < 2; i++) {
+  //   for (x = 0; x < 32; x++) {
+  //     for (y = 0; y < 32; y++)  {
+  //       body.color = [0.8, 1.0, 1.0, 1.0];
+  //       body.textureNum = -3;
+  //       body.matrix.setTranslate(0, -0.75, 0);
+  //       body.matrix.scale(1, 1, 1);
+  //       body.matrix.translate(x-16, 0, y-16);
+  //       body.renderfaster();
+  //     }
+  //   }
+  // }
+
 
 
 function renderAllShapes() {
