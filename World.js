@@ -365,11 +365,12 @@ function movementScript() {
   // backwards.normalize();
 
   if (d_move == 1) { // Right
-    g_camera.moveLeft();
+    g_camera.moveRight();
     // g_camera.eye.elements[0] += leftward.elements[0] * 0.2;
     // g_camera.eye.elements[2] += leftward.elements[2] * 0.2;
   }
   if (a_move == 1) { // Left
+    g_camera.moveLeft();
     // g_camera.eye.elements[0] += rightward.elements[0] * 0.2;
     // g_camera.eye.elements[2] += rightward.elements[2] * 0.2;
   }
@@ -387,9 +388,11 @@ function movementScript() {
     // g_camera.eye.elements[2] -= backwards.elements[2] * 0.2;
   }
   if (q_move == 1) { // Left Rotate
+    g_camera.panLeft();
     // rotateY(g_camera.at, .04);  
   }
   if (e_move == 1) { // Right rotate
+    g_camera.panRight();
     // rotateY(g_camera.at, -.04);
   }
 }

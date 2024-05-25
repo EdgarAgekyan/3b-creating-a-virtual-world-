@@ -2,6 +2,7 @@ class Camera {
     constructor(canvas) {
         this.fov = 60;
         this.speed = .1;
+        this.alpha = 3;
         this.eye = new Vector3([0, 0, 0]);
         this.at = new Vector3([0, 0, -1]);
         this.up = new Vector3([0, 1, 0]);
@@ -55,34 +56,93 @@ class Camera {
         // Add forward vector to eye and center
         this.eye.add(this.backwardsVec);
         this.at.add(this.backwardsVec);
-        
+
         this.updateLookAt();        
     }
 
     moveLeft() {
         // New forward vector
-        this.forwardVec = new Vector3(this.at.elements);
+        this.leftVec = new Vector3(this.at.elements);
 
         // f = at - eye
-        this.forwardVec.elements[0] -= this.eye.elements[0];
-        this.forwardVec.elements[1] -= this.eye.elements[1];
-        this.forwardVec.elements[2] -= this.eye.elements[2];
+        this.leftVec.sub(this.eye);
 
-        this.sideVec = new Vector3(this.up.elements);
+        this.sideVec = new Vector3();
 
+        this.sideVec = Vector3.cross(this.up, this.leftVec);
 
-        this.forwardVec.normalize();
+        this.sideVec.normalize();
 
+        this.sideVec.mul(this.speed);
+
+        this.eye.add(this.sideVec);
+        this.at.add(this.sideVec);
+
+        this.updateLookAt();        
 
     }
 
-    right() {
-        var f = this.at.sub(this.eye);
-        f = f.divide(f.length());
-        var s = f.cross(this.up);
-        s = s.divide(s.length());
-        this.at = this.at.add(s);
-        this.eye = this.eye.add(s);
+    moveRight() {
+        // New forward vector
+        this.rightVec = new Vector3(this.eye.elements);
+
+        // f = at - eye
+        this.rightVec.sub(this.at);
+
+        this.sideVec = new Vector3();
+
+        this.sideVec = Vector3.cross(this.up, this.rightVec);
+
+        this.sideVec.normalize();
+
+        this.sideVec.mul(this.speed);
+
+        this.eye.add(this.sideVec);
+        this.at.add(this.sideVec);
+
+        this.updateLookAt();        
+
+    }
+
+    panLeft() {
+        // New forward vector
+        this.panLeftVec = new Vector3(this.at.elements);
+
+        // f = at - eye
+        this.panLeftVec.sub(this.eye);
+
+        this.rotationMatrix = new Matrix4();
+        this.f_prime;
+
+        this.rotationMatrix.setRotate(this.alpha,this.up.elements[0],this.up.elements[1],this.up.elements[2]);
+
+        this.f_prime = this.rotationMatrix.multiplyVector3(this.panLeftVec);
+
+        this.at.set(this.eye);
+
+        this.at.add(this.f_prime);
+
+        this.updateLookAt();     
+    }
+
+    panRight() {
+        this.panRightVec = new Vector3(this.at.elements);
+
+        // f = at - eye
+        this.panRightVec.sub(this.eye);
+
+        this.rotationMatrix = new Matrix4();
+        this.f_prime;
+
+        this.rotationMatrix.setRotate(-this.alpha,this.up.elements[0],this.up.elements[1],this.up.elements[2]);
+
+        this.f_prime = this.rotationMatrix.multiplyVector3(this.panRightVec);
+
+        this.at.set(this.eye);
+
+        this.at.add(this.f_prime);
+
+        this.updateLookAt();    
     }
 
 }
