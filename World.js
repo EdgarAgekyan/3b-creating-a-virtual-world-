@@ -365,6 +365,7 @@ function movementScript() {
   // backwards.normalize();
 
   if (d_move == 1) { // Right
+    g_camera.moveLeft();
     // g_camera.eye.elements[0] += leftward.elements[0] * 0.2;
     // g_camera.eye.elements[2] += leftward.elements[2] * 0.2;
   }
@@ -379,15 +380,16 @@ function movementScript() {
     // g_camera.eye.elements[2] += forward.elements[2] * 0.2;
   }
   if (s_move == 1) { // Back
+    g_camera.moveBackwards();
     // g_camera.eye.elements[2] += 0.2;
     // g_camera.eye.elements[0] -= backwards.elements[0] * 0.2;
     // g_camera.eye.elements[1] -= backwards.elements[1] * 0.2;
     // g_camera.eye.elements[2] -= backwards.elements[2] * 0.2;
   }
-  if (q_move == 1) { // Back
+  if (q_move == 1) { // Left Rotate
     // rotateY(g_camera.at, .04);  
   }
-  if (e_move == 1) { // Back
+  if (e_move == 1) { // Right rotate
     // rotateY(g_camera.at, -.04);
   }
 }
