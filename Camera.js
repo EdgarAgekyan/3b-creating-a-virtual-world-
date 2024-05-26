@@ -57,7 +57,7 @@ class Camera {
         this.eye.add(this.backwardsVec);
         this.at.add(this.backwardsVec);
 
-        this.updateLookAt();        
+        this.updateLookAt();
     }
 
     moveLeft() {
@@ -78,7 +78,7 @@ class Camera {
         this.eye.add(this.sideVec);
         this.at.add(this.sideVec);
 
-        this.updateLookAt();        
+        this.updateLookAt();
 
     }
 
@@ -100,7 +100,7 @@ class Camera {
         this.eye.add(this.sideVec);
         this.at.add(this.sideVec);
 
-        this.updateLookAt();        
+        this.updateLookAt();
 
     }
 
@@ -114,7 +114,7 @@ class Camera {
         this.rotationMatrix = new Matrix4();
         this.f_prime;
 
-        this.rotationMatrix.setRotate(this.alpha,this.up.elements[0],this.up.elements[1],this.up.elements[2]);
+        this.rotationMatrix.setRotate(this.alpha, this.up.elements[0], this.up.elements[1], this.up.elements[2]);
 
         this.f_prime = this.rotationMatrix.multiplyVector3(this.panLeftVec);
 
@@ -122,7 +122,7 @@ class Camera {
 
         this.at.add(this.f_prime);
 
-        this.updateLookAt();     
+        this.updateLookAt();
     }
 
     panRight() {
@@ -134,7 +134,7 @@ class Camera {
         this.rotationMatrix = new Matrix4();
         this.f_prime;
 
-        this.rotationMatrix.setRotate(-this.alpha,this.up.elements[0],this.up.elements[1],this.up.elements[2]);
+        this.rotationMatrix.setRotate(-this.alpha, this.up.elements[0], this.up.elements[1], this.up.elements[2]);
 
         this.f_prime = this.rotationMatrix.multiplyVector3(this.panRightVec);
 
@@ -145,52 +145,33 @@ class Camera {
         this.updateLookAt();
     }
 
-    lookUp() {
-
-    }
-
-    lookDown() {
-
-    }
-
     lookUpAndDown(newAlpha) {
-        // if (this.at.elements[1] >= .87) {
-        //     this.at.elements[1] = .86
-        //     console.log("hi")
-        //     return;
-        // }
-        // else if (this.at.elements[1] <= -.87) {
-        //     this.at.elements[1] = -.86
-        //     console.log("hi2")
-        //     return;
-        // }
-        
         // New forward vector
         this.panUpVec = new Vector3(this.at.elements);
-    
+
         // f = at - eye
         this.panUpVec.sub(this.eye);
-    
+
         // Calculate the right vector as cross product of forward and up vector
         let rightVec = new Vector3();
         rightVec = Vector3.cross(this.panUpVec, this.up);
         rightVec.normalize();
-    
+
         this.rotationMatrix = new Matrix4();
         this.f_prime;
-    
+
         // Set the rotation matrix to rotate around the right vector
         this.rotationMatrix.setRotate(newAlpha, rightVec.elements[0], rightVec.elements[1], rightVec.elements[2]);
-    
+
         this.f_prime = this.rotationMatrix.multiplyVector3(this.panUpVec);
-    
+
         this.at.set(this.eye);
-    
+
         this.at.add(this.f_prime);
-    
+
         this.updateLookAt();
     }
-    
+
 
     lookLeftAndRight(newAlpha) {
         // New forward vector
@@ -202,7 +183,7 @@ class Camera {
         this.rotationMatrix = new Matrix4();
         this.f_prime;
 
-        this.rotationMatrix.setRotate(newAlpha, this.up.elements[0],this.up.elements[1],this.up.elements[2]);
+        this.rotationMatrix.setRotate(newAlpha, this.up.elements[0], this.up.elements[1], this.up.elements[2]);
 
         this.f_prime = this.rotationMatrix.multiplyVector3(this.panLeftVec);
 
@@ -211,10 +192,6 @@ class Camera {
         this.at.add(this.f_prime);
 
         this.updateLookAt();
-    }
-
-    lookRight() {
-
     }
 
 }
