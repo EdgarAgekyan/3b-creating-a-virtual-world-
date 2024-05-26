@@ -321,7 +321,7 @@ function main() {
   initTextures();
 
   // Register function (event handler) to be called as the cursor moves across the screen
-  canvas.onmousemove = click;
+  canvas.onmousemove = cursor;
 
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -452,7 +452,7 @@ function tick() {
 
 var g_shapesList = [];
 
-function click(ev) {
+function cursor(ev) {
 
   // Got help from Rohan and ChatGPT to figure this out.
   // Originally I realized about the gimble lock situation and I tried
