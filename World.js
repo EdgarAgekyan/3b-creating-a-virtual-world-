@@ -275,7 +275,7 @@ function main() {
       d_move = 1;
     }
     else if (ev.keyCode == 65) { // Left
-     a_move = 1;
+      a_move = 1;
     }
     else if (ev.keyCode == 87) { // Forward
       w_move = 1;
@@ -296,7 +296,7 @@ function main() {
       d_move = 0;
     }
     else if (ev.keyCode == 65) { // Left
-     a_move = 0;
+      a_move = 0;
     }
     else if (ev.keyCode == 87) { // Forward
       w_move = 0;
@@ -319,7 +319,7 @@ function main() {
   });
 
   initTextures();
-  
+
   // Register function (event handler) to be called as the cursor moves across the screen
   canvas.onmousemove = click;
 
@@ -454,23 +454,89 @@ var g_shapesList = [];
 
 function click(ev) {
 
-  // We want to see how much the cursor moves on the canvas x-axis and y-axis
-  // Then for canvas x-axis, we want to change looking left to right
-  // Then for canvas y-axis, we want to change looking up to down
+  // Got help from Rohan and ChatGPT to figure this out.
+  // Originally I realized about the gimble lock situation and I tried
+  // to have some sort of stopping mechanism if I look too far up or down.
+  // Then I found an issue that I need a way to look back down since I end up getting stuck
+  // I used chatgpt to help me find the exact angle I am looking at .eye relative to .at
+  // so I can then reset my proper variables if I go over the limit.
 
-  // ev.movementX;
+  let direction = new Vector3(g_camera.at.elements);
+  direction.sub(g_camera.eye);
+  direction.normalize();
 
+  // This is the yaw
+  let rotation = Math.atan2(direction.elements[0], -direction.elements[2]) * 180 / Math.PI;
+  
+  let pitch = Math.asin(direction.elements[1]) * 180 / Math.PI;
+
+  // console.log(rotation);
+
+  // Update the camera rotation based on mouse movement
   g_camera.lookLeftAndRight(-ev.movementX);
-  g_camera.lookUpAndDown(-ev.movementY);
+  if (Math.abs(ev.movementY > 5)) {
+    g_camera.lookUpAndDown(-5);
+  }
+  else if (Math.abs(ev.movementY < -5)) {
+    g_camera.lookUpAndDown(5);
+  }
+  else {
+    g_camera.lookUpAndDown(-ev.movementY);
+  }
+
+  // Recalculate the direction vector and pitch after the camera movement
+  direction = new Vector3(g_camera.at.elements);
+  direction.sub(g_camera.eye);
+  direction.normalize();
+  
+  pitch = Math.asin(direction.elements[1]) * 180 / Math.PI;
+
+  // Clamp pitch within -85 to 85 degrees
+  if (pitch < -85) {
+      pitch = -85;
+  } else if (pitch > 85) {
+      pitch = 85;
+  }
+
+  direction.elements[1] = Math.sin(pitch * Math.PI / 180);
+  let cosPitch = Math.cos(pitch * Math.PI / 180);
+  direction.elements[0] = direction.elements[0] * cosPitch / Math.sqrt(direction.elements[0] ** 2 + direction.elements[2] ** 2);
+  direction.elements[2] = direction.elements[2] * cosPitch / Math.sqrt(direction.elements[0] ** 2 + direction.elements[2] ** 2);
+
+  g_camera.at.set(g_camera.eye);
+  g_camera.at.add(direction);
+
+  // Update the lookAt matrix
+  g_camera.updateLookAt();
+
+
+
+  // g_camera.lookUpAndDown(-ev.movementY);
+  // console.log(g_camera.at.elements[1]);
+
+  // if (g_camera.at.elements[1] > g_camera.eye.elements[1]) {
+  //   console.log("Log", g_camera.at.elements[1], ev.movementY);
+    // g_camera.lookUpAndDown(-ev.movementY);
+    // console.log(g_camera.at.elements[1]);
+    // console.log(g_camera.at.elements[1]);
+    // console.log(g_camera.at.elements[2]);
+
+    // }
+
+  // if ((!(g_camera.at.elements[1] <= -89 && ev.movementY >= 0)) &&
+  //   (!(g_camera.at.elements[1] >= .89 && ev.movementY < 0))) {
+  //   console.log("Log", g_camera.at.elements[1], ev.movementY);
+  //   g_camera.lookUpAndDown(-ev.movementY);
+  // }
 
 
 
   // Extract the event click and return it in WebGL coordinates
   // let = [x, y] = convertCoordinatesEventToGL(ev);
-  
+
   // x_rot += ev.movementX;
   // y_rot += ev.movementY;
-  
+
 
   // g_camera.at.elements[0] += ev.movementX;
   // g_camera.at.elements[1] += ev.movementY;
@@ -478,7 +544,7 @@ function click(ev) {
 
 
   // rotateY(g_camera.at, -ev.movementX/100); 
-  
+
   // console.log(g_camera.at.elements[1]);
   // if (!(g_camera.at.elements[1] >= 88 && ev.movementY < 0)) {
   //   rotateX(g_camera.at, -ev.movementY / 100); 
@@ -497,7 +563,7 @@ function click(ev) {
   // rotateY(g_camera.at, -ev.movementX / 100);
 
   // console.log(g_camera.at.elements[0], g_camera.at.elements[1], g_camera.at.elements[2]);
-  
+
   // if (g_camera.at.elements[1] >= 98) {
   //   rotateX(g_camera.at, -.1);
   // }
@@ -563,13 +629,13 @@ function drawMap() {
       if (g_map[x][y] == 1) {
         body.matrix.setTranslate(0, -1, 0);
         body.color = [1.0, 1.0, 1.0, 1.0];
-        body.matrix.translate(x-4, -0.75, y-4);
+        body.matrix.translate(x - 4, -0.75, y - 4);
         body.render();
       }
       else if (g_map2[x][y] == 1) {
         body.matrix.setTranslate(0, -1, 0);
         body.color = [0.0, 0.0, 0.0, 1.0];
-        body.matrix.translate(x-4, -0.75, y-4);
+        body.matrix.translate(x - 4, -0.75, y - 4);
         body.render();
       }
     }
@@ -604,20 +670,20 @@ function drawMap() {
 // }
 
 
-  // var body = new Cube();
-  // body.textureNum = -3; // setting texture
-  // for (i = 0; i < 2; i++) {
-  //   for (x = 0; x < 32; x++) {
-  //     for (y = 0; y < 32; y++)  {
-  //       body.color = [0.8, 1.0, 1.0, 1.0];
-  //       body.textureNum = -3;
-  //       body.matrix.setTranslate(0, -0.75, 0);
-  //       body.matrix.scale(1, 1, 1);
-  //       body.matrix.translate(x-16, 0, y-16);
-  //       body.renderfaster();
-  //     }
-  //   }
-  // }
+// var body = new Cube();
+// body.textureNum = -3; // setting texture
+// for (i = 0; i < 2; i++) {
+//   for (x = 0; x < 32; x++) {
+//     for (y = 0; y < 32; y++)  {
+//       body.color = [0.8, 1.0, 1.0, 1.0];
+//       body.textureNum = -3;
+//       body.matrix.setTranslate(0, -0.75, 0);
+//       body.matrix.scale(1, 1, 1);
+//       body.matrix.translate(x-16, 0, y-16);
+//       body.renderfaster();
+//     }
+//   }
+// }
 
 
 
@@ -628,7 +694,7 @@ function renderAllShapes() {
   var startTime = performance.now();
 
   var projMat = new Matrix4();
-  projMat.setPerspective(50, 1*canvas.width/canvas.height, 1, 100);
+  projMat.setPerspective(50, 1 * canvas.width / canvas.height, 1, 100);
   gl.uniformMatrix4fv(u_ProjectionMatrix, false, projMat.elements);
 
   var viewMat = new Matrix4();
