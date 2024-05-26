@@ -142,7 +142,44 @@ class Camera {
 
         this.at.add(this.f_prime);
 
-        this.updateLookAt();    
+        this.updateLookAt();
+    }
+
+    lookUp() {
+
+    }
+
+    lookDown() {
+
+    }
+
+    lookUpAndDown(newAlpha) {
+
+    }
+
+    lookLeftAndRight(newAlpha) {
+        // New forward vector
+        this.panLeftVec = new Vector3(this.at.elements);
+
+        // f = at - eye
+        this.panLeftVec.sub(this.eye);
+
+        this.rotationMatrix = new Matrix4();
+        this.f_prime;
+
+        this.rotationMatrix.setRotate(newAlpha, this.up.elements[0],this.up.elements[1],this.up.elements[2]);
+
+        this.f_prime = this.rotationMatrix.multiplyVector3(this.panLeftVec);
+
+        this.at.set(this.eye);
+
+        this.at.add(this.f_prime);
+
+        this.updateLookAt();
+    }
+
+    lookRight() {
+
     }
 
 }

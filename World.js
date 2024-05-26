@@ -453,6 +453,18 @@ function tick() {
 var g_shapesList = [];
 
 function click(ev) {
+
+  // We want to see how much the cursor moves on the canvas x-axis and y-axis
+  // Then for canvas x-axis, we want to change looking left to right
+  // Then for canvas y-axis, we want to change looking up to down
+
+  // ev.movementX;
+
+  g_camera.lookLeftAndRight(-ev.movementX);
+  g_camera.lookUpAndDown(-ev.movementY);
+
+
+
   // Extract the event click and return it in WebGL coordinates
   // let = [x, y] = convertCoordinatesEventToGL(ev);
   
