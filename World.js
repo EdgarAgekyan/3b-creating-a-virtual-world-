@@ -26,6 +26,7 @@ var FSHADER_SOURCE = `
   uniform sampler2D u_Sampler4;
   uniform sampler2D u_Sampler5;
   uniform sampler2D u_Sampler6;
+  uniform sampler2D u_Sampler7;
   uniform int u_whichTexture;
   void main() {
     if (u_whichTexture == -2) {
@@ -51,6 +52,9 @@ var FSHADER_SOURCE = `
     }
     else if (u_whichTexture == -8) {
       gl_FragColor = texture2D(u_Sampler6, v_UV); // use texture1
+    }
+    else if (u_whichTexture == -9) {
+      gl_FragColor = texture2D(u_Sampler7, v_UV); // use texture1
     }
     else {
       gl_FragColor = vec4(1.0, 0.2, 0.2, 1.0); // error, put redish
@@ -78,6 +82,7 @@ let u_Sampler3;
 let u_Sampler4;
 let u_Sampler5;
 let u_Sampler6;
+let u_Sampler7;
 let g_camera;
 
 function setupWebGL() {
@@ -167,6 +172,11 @@ function connectVariablesToGLSL() {
   u_Sampler6 = gl.getUniformLocation(gl.program, 'u_Sampler6');
   if (!u_Sampler6) {
     console.log('Failed to get the storage location of u_Sampler6');
+    return;
+  }
+  u_Sampler7 = gl.getUniformLocation(gl.program, 'u_Sampler7');
+  if (!u_Sampler7) {
+    console.log('Failed to get the storage location of u_Sampler7');
     return;
   }
   u_whichTexture = gl.getUniformLocation(gl.program, 'u_whichTexture');
@@ -323,6 +333,15 @@ function initTextures() {
   image7.src = './resources/images/mine_sand.png';
 
 
+  var image8 = new Image();
+  if (!image8) {
+    console.log('Failed to create the image object');
+    return false;
+  }
+  image8.onload = function () { sendImageToTEXTURE7(image8); }
+  image8.src = './resources/images/mine_water.png';
+
+
 
   return true;
 }
@@ -428,6 +447,21 @@ function sendImageToTEXTURE6(image) {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
   gl.uniform1i(u_Sampler6, 6);
+  console.log('finished loadTexture');
+}
+
+function sendImageToTEXTURE7(image) {
+  let anotherTexture = gl.createTexture();
+  if (!anotherTexture) {
+    console.log('Failed to create the anotherTexture object');
+    return false;
+  }
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+  gl.activeTexture(gl.TEXTURE7);
+  gl.bindTexture(gl.TEXTURE_2D, anotherTexture);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+  gl.uniform1i(u_Sampler7, 7);
   console.log('finished loadTexture');
 }
 
@@ -856,19 +890,44 @@ var layer1_2 = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+  [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+];
+
+var layer1_4 = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
   [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -1159,6 +1218,24 @@ function drawMap() {
     for (var y = 0; y < layer1.length; y++) {
       if (layer1[x][y] == 1) {
         body.textureNum = -6;
+        body.matrix.setTranslate(0, -1, 0);
+        body.color = [1.0, 1.0, 1.0, 1.0];
+        // body.matrix.scale(3, 3, 3);
+        body.matrix.scale(3, 3, 3);
+        body.matrix.translate(x - 10, .25, y - 11);
+        body.renderfaster();
+      }
+      else if (layer1_2[x][y] == 1) {
+        body.textureNum = -8;
+        body.matrix.setTranslate(0, -1, 0);
+        body.color = [1.0, 1.0, 1.0, 1.0];
+        // body.matrix.scale(3, 3, 3);
+        body.matrix.scale(3, 3, 3);
+        body.matrix.translate(x - 10, .25, y - 11);
+        body.renderfaster();
+      }
+      else if (layer1_4[x][y] == 1) {
+        body.textureNum = -9;
         body.matrix.setTranslate(0, -1, 0);
         body.color = [1.0, 1.0, 1.0, 1.0];
         // body.matrix.scale(3, 3, 3);
@@ -1472,8 +1549,8 @@ function renderAllShapes() {
   var body = new Cube();
   body.color = [1.0, 0.0, 0.0, 1.0];
   body.textureNum = -3;
-  body.matrix.translate(0, -2, 0.0);
-  body.matrix.scale(200, 0, 200);
+  body.matrix.translate(0, -40, 0.0);
+  body.matrix.scale(300, 0, 300);
   body.matrix.translate(-0.5, 0, -0.5);
   body.render();
 
@@ -1481,7 +1558,7 @@ function renderAllShapes() {
   var sky = new Cube();
   sky.color = [1.0, 0.0, 0.0, 1.0];
   sky.textureNum = 0;
-  sky.matrix.scale(200, 200, 200);
+  sky.matrix.scale(300, 300, 300);
   sky.matrix.translate(-0.5, -0.5, -0.5);
   sky.render();
 
